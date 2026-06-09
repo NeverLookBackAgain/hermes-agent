@@ -504,21 +504,22 @@ def _resolve_single_delivery_target(job: dict, deliver_value: str) -> Optional[d
                 "chat_id": str(origin["chat_id"]),
                 "thread_id": origin.get("thread_id"),
             }
-        # Origin missing (e.g. job created via API/script) — try each
-        # platform's home channel as a fallback instead of silently dropping.
-        for platform_name in _iter_home_target_platforms():
-            chat_id = _get_home_target_chat_id(platform_name)
-            if chat_id:
-                logger.info(
-                    "Job '%s' has deliver=origin but no origin; falling back to %s home channel",
-                    job.get("name", job.get("id", "?")),
-                    platform_name,
-                )
-                return {
-                    "platform": platform_name,
-                    "chat_id": chat_id,
-                    "thread_id": _get_home_target_thread_id(platform_name),
-                }
+        # Origin missing — 唯一 fallback 终点 = 微信（不静默退到其他渠道）
+        chat_id = _get_home_target_chat_id("weixin")
+        if chat_id:
+            logger.info(
+                "Job '%s' has deliver=origin but no origin; falling back to weixin home channel",
+                job.get("name", job.get("id", "?")),
+            )
+            return {
+                "platform": "weixin",
+                "chat_id": chat_id,
+                "thread_id": _get_home_target_thread_id("weixin"),
+            }
+        logger.error(
+            "Job '%s' has deliver=origin but no origin and no weixin home channel configured — NOT delivering",
+            job.get("name", job.get("id", "?")),
+        )
         return None
 
     if ":" in deliver_value:
