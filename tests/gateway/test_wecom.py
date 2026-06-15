@@ -181,6 +181,7 @@ class TestWeComConnect:
 
         assert success is False
         assert release_calls == [("wecom-bot-id", "bot-1")]
+    @pytest.mark.asyncio
     async def test_open_connection_cleans_up_session_when_ws_connect_fails(self, monkeypatch):
         import gateway.platforms.wecom as wecom_module
         from gateway.platforms.wecom import WeComAdapter
