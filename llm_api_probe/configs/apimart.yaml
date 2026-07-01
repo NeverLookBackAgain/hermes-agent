@@ -3,8 +3,8 @@ providers:
   - name: Apimart
     label: 中转站 Apimart
     category: aggregator
-    base_url: https://api.apib.ai/v1
-    api_key: ${APISMART_API_KEY}
-    models: [deepseek-v4-flash, deepseek-v4-pro, glm-5.1]
+    base_url: https://api.apib.ai/v1/
+    api_key: ${APIMART_KEY}
+    models: [deepseek-v4-flash, deepseek-v4-pro]
     note: 价格计算模糊, 了解实际使用计费方式
     timeout: 60
